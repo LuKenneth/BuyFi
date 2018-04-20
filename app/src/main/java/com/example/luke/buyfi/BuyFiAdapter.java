@@ -75,6 +75,7 @@ public class BuyFiAdapter extends ArrayAdapter<NetworkListing> implements View.O
         viewHolder.price.setText(network.getPrice());
         viewHolder.status.setText(network.getClaimed());
         viewHolder.action_button.setText(network.getActionName());
+//        viewHolder.action_button.setBackgroundColor(network.getActionColor());
         //signalStrength tbd
         return convertView;
     }

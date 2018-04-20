@@ -12,6 +12,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<BuyFiNetwork> networks;
     private ArrayList<NetworkListing> networkListings;
     private FirebaseManager fm;
+    private SwipeRefreshLayout refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,29 @@ public class MainActivity extends AppCompatActivity {
 
         Log.v("NetworkList", "List of Networks: \n" + networks);
 
+        //pull to refresh
+        refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadNetworks();
+            }
+        });
 
+
+    }
+
+    public void loadNetworks() {
+        nm.obtainNetworks(this);
+        networks = nm.getNetworks();
+        networkListings.clear();
+        for(int i = 0; i < networks.size(); i++) {
+            NetworkListing networkList = new NetworkListing(networks.get(i), i%2==0, "$50", "(216)-225-4193");
+            networkListings.add(networkList);
+            fm.writeNetwork(networkList);
+        }
+        list.setAdapter(adapter);
+        refresh.setRefreshing(false);
     }
 
     @Override

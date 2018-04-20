@@ -26,6 +26,8 @@ public class NetworkListing {
         return claimed ? "RENT" : "CLAIM";
     }
 
+    public int getActionColor() { return claimed ? android.R.color.holo_green_light : android.R.color.darker_gray ; }
+
     public void setClaimed(boolean claimed) {
         this.claimed = claimed;
     }
