@@ -38,28 +38,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //initialize
         fm = new FirebaseManager();
         nm = NetworkManager.getSharedInstance();
-        nm.obtainNetworks(this);
-        networks = nm.getNetworks();
-        list = (ListView)findViewById(R.id.list);
         networkListings = new ArrayList<NetworkListing>();
-        for(int i = 0; i < networks.size(); i++) {
-            NetworkListing networkList = new NetworkListing(networks.get(i), i%2==0, "$50", "(216)-225-4193");
-            networkListings.add(networkList);
-            fm.writeNetwork(networkList);
-        }
         adapter = new BuyFiAdapter(networkListings, getApplicationContext());
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.v("OnClick", "clicked: " + view.toString());
-            }
-        });
-
-
-        Log.v("NetworkList", "List of Networks: \n" + networks);
+        list = (ListView)findViewById(R.id.list);
 
         //pull to refresh
         refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
@@ -70,6 +54,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        loadNetworks();
+
+        //Logs
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.v("OnClick", "clicked: " + view.toString());
+            }
+        });
+        Log.v("NetworkList", "List of Networks: \n" + networks);
 
     }
 

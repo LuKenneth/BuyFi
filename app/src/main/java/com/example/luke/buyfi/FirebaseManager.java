@@ -17,7 +17,8 @@ public class FirebaseManager {
 
     public void writeNetwork(NetworkListing network) {
         //the key of a network will be a combination of SSID and BSSID
-        ref.child(network.getNetwork().getSSID() + ":" + network.getNetwork().getBSSID()).setValue(network);
+        String networkID = network.getNetwork().getSSID() + ":" + network.getNetwork().getBSSID();
+        ref.child(networkID).setValue(network);
     }
 
 }
