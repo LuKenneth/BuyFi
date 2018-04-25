@@ -1,5 +1,7 @@
 package com.example.luke.buyfi;
 
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.MutableData;
@@ -26,12 +28,14 @@ public class NetworkTransactionHandler implements Transaction.Handler {
         if(network == null) {
             return Transaction.success(mutableData);
         }
-        
+        Log.v("NetworkTransaction:", "doTransaction called");
+
         return null;
     }
 
     @Override
     public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-
+        //Now create a listing if one does not exist
+        Log.v("NetworkTransaction:", "onComplete called");
     }
 }
