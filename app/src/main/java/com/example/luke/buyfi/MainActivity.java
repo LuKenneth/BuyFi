@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         nm = NetworkManager.getSharedInstance();
         fm = new FirebaseManager(this);
         networkListings = new ArrayList<NetworkListing>();
-        adapter = new BuyFiAdapter(networkListings, getApplicationContext());
         list = (ListView)findViewById(R.id.list);
 
         //pull to refresh
@@ -85,14 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void showNetworks(ArrayList<NetworkListing> networkListings) {
         this.networkListings = networkListings;
-        list.setAdapter(adapter);
-        refresh.setRefreshing(false);
-    }
-
-    public void addNetwork(NetworkListing networkList) {
-        //this method is called from FirebaseManager
-        //it is passed either the existing listing, or the new one.
-        networkListings.add(networkList);
+        adapter = new BuyFiAdapter(networkListings, getApplicationContext());
         list.setAdapter(adapter);
         refresh.setRefreshing(false);
     }

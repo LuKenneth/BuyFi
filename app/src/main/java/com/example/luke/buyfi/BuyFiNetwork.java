@@ -1,25 +1,40 @@
 package com.example.luke.buyfi;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 /**
  * Created by Luke on 4/12/2018.
  */
 
+@IgnoreExtraProperties
 public class BuyFiNetwork {
     private String SSID;
     private int signalStrength;
     private String BSSID;
     private String capabilities;
+
     enum signal_strength {
         strong,
         good,
         weak
     }
 
+    /*
+        signal strength levels:
+        -73 to -80 Strong
+        -81 to -89 Good
+        -90 to -100 Weak
+     */
+
     public BuyFiNetwork(String SSID, int signalStrength, String BSSID, String capabilities) {
         this.SSID = SSID;
         this.signalStrength = signalStrength;
         this.BSSID = BSSID;
         this.capabilities = capabilities;
+    }
+
+    public BuyFiNetwork() {
+
     }
 
     @Override
@@ -38,6 +53,18 @@ public class BuyFiNetwork {
 
     public BuyFiNetwork strongerSignal(BuyFiNetwork duplicate) {
         return this.getSignalStrength() >= duplicate.getSignalStrength() ? this : duplicate;
+    }
+
+    public signal_strength getSignalLevel() {
+        if(signalStrength <= -90) {
+            return signal_strength.weak;
+        }
+        else if(signalStrength <= -81 && signalStrength >= -89) {
+            return signal_strength.good;
+        }
+        else {
+            return signal_strength.strong;
+        }
     }
 
     public String getSSID() {

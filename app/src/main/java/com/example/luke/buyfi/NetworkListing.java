@@ -1,9 +1,12 @@
 package com.example.luke.buyfi;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 /**
  * Created by Luke on 4/15/2018.
  */
 
+@IgnoreExtraProperties
 public class NetworkListing {
 
     private boolean claimed;
@@ -25,13 +28,13 @@ public class NetworkListing {
 
     }
 
-    public String getClaimed() {
-        return claimed ? "CLAIMED" : "UNCLAIMED";
-    }
+    public boolean getClaimed() { return claimed; }
 
     public String getActionName() {
         return claimed ? "RENT" : "CLAIM";
     }
+
+    public String getStatus() { return claimed ? "CLAIMED" : "UNCLAIMED"; }
 
     public int getActionColor() { return claimed ? android.R.color.holo_green_light : android.R.color.darker_gray ; }
 
