@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private NetworkManager nm;
     private ArrayList<BuyFiNetwork> networks;
     private ArrayList<NetworkListing> networkListings;
+    private NetworkTransactionHandler nth;
     private FirebaseManager fm;
     private SwipeRefreshLayout refresh;
 
@@ -39,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //initialize
-        fm = new FirebaseManager();
         nm = NetworkManager.getSharedInstance();
+        fm = new FirebaseManager(this);
         networkListings = new ArrayList<NetworkListing>();
         adapter = new BuyFiAdapter(networkListings, getApplicationContext());
         list = (ListView)findViewById(R.id.list);
@@ -72,13 +73,30 @@ public class MainActivity extends AppCompatActivity {
         networks = nm.getNetworks();
         networkListings.clear();
         for(int i = 0; i < networks.size(); i++) {
+            //default when creating a new network list
             NetworkListing networkList = new NetworkListing(networks.get(i), i%2==0, "$50", "(216)-225-4193");
             networkListings.add(networkList);
-            fm.writeNetwork(networkList);
+//            nth = new NetworkTransactionHandler(networkList);
+//            fm.getReference().runTransaction(nth);
         }
+        fm.setNetworkListing(networkListings);
+        fm.getNetworks();
+    }
+
+    public void showNetworks(ArrayList<NetworkListing> networkListings) {
+        this.networkListings = networkListings;
         list.setAdapter(adapter);
         refresh.setRefreshing(false);
     }
+
+    public void addNetwork(NetworkListing networkList) {
+        //this method is called from FirebaseManager
+        //it is passed either the existing listing, or the new one.
+        networkListings.add(networkList);
+        list.setAdapter(adapter);
+        refresh.setRefreshing(false);
+    }
+
 
     @Override
     protected void onResume() {

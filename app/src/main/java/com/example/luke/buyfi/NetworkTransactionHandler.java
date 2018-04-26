@@ -14,28 +14,31 @@ import com.google.firebase.database.Transaction;
 public class NetworkTransactionHandler implements Transaction.Handler {
 
     private NetworkListing networkList;
-    private String networkID;
+    private MainActivity main;
 
-    public NetworkTransactionHandler(NetworkListing networkList, String networkID) {
+    public NetworkTransactionHandler(NetworkListing networkList) {
         super();
         this.networkList = networkList;
-        this.networkID = networkID;
     }
 
     @Override
     public Transaction.Result doTransaction(MutableData mutableData) {
-        NetworkListing network = mutableData.child(networkID).getValue(NetworkListing.class);
-        if(network == null) {
-            return Transaction.success(mutableData);
-        }
-        Log.v("NetworkTransaction:", "doTransaction called");
+        NetworkListing network = mutableData.child(networkList.getNetworkID()).getValue(NetworkListing.class);
 
-        return null;
+        Log.v("NetworkTransaction:", "doTransaction called");
+        return Transaction.success(mutableData);
     }
 
     @Override
     public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
         //Now create a listing if one does not exist
         Log.v("NetworkTransaction:", "onComplete called");
+        if(!dataSnapshot.child(networkList.getNetworkID()).exists()) {
+        }
+        else {
+
+        }
     }
+
+
 }

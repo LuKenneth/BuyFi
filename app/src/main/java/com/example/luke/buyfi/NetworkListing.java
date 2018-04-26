@@ -10,12 +10,19 @@ public class NetworkListing {
     private String price;
     private String contact;
     private BuyFiNetwork network;
+    private String networkID;
 
     public NetworkListing(BuyFiNetwork network, boolean claimed, String price, String contact) {
         this.network = network;
         this.claimed = claimed;
         this.price = price;
         this.contact = contact;
+        //the key of a network will be a combination of SSID and BSSID
+        this.networkID = network.getSSID() + ":" + network.getBSSID();
+    }
+
+    public NetworkListing() {
+
     }
 
     public String getClaimed() {
@@ -55,4 +62,6 @@ public class NetworkListing {
     public void setNetwork(BuyFiNetwork network) {
         this.network = network;
     }
+
+    public String getNetworkID() { return this.networkID; }
 }
