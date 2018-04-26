@@ -45,7 +45,7 @@ public class BuyFiAdapter extends ArrayAdapter<NetworkListing> implements View.O
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        NetworkListing network = getItem(position);
+        final NetworkListing network = getItem(position);
         ViewHolder viewHolder;
         final View result;
 
@@ -73,9 +73,30 @@ public class BuyFiAdapter extends ArrayAdapter<NetworkListing> implements View.O
 
         viewHolder.SSID.setText(network.getNetwork().getSSID());
         viewHolder.price.setText(network.getPrice());
-        viewHolder.status.setText(network.getClaimed());
+        viewHolder.status.setText(network.getStatus());
         viewHolder.action_button.setText(network.getActionName());
-        //signalStrength tbd
+//        viewHolder.action_button.setBackgroundColor(network.getActionColor());
+        viewHolder.signal_strength.setImageResource(getWifiImage(network.getNetwork().getSignalLevel()));
+        viewHolder.action_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(network.getClaimed()) {
+                    //rent();
+                }
+                else {
+                    //claim();
+                }
+            }
+        });
         return convertView;
+    }
+
+    private int getWifiImage(BuyFiNetwork.signal_strength signal_strength) {
+        switch (signal_strength) {
+            case weak: return R.drawable.wifi_weak;
+            case good: return R.drawable.wifi_good;
+            case strong: return R.drawable.wifi_full;
+            default: return R.drawable.wifi_full;
+        }
     }
 }

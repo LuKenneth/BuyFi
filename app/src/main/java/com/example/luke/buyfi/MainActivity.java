@@ -12,6 +12,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,38 +30,65 @@ public class MainActivity extends AppCompatActivity {
     private NetworkManager nm;
     private ArrayList<BuyFiNetwork> networks;
     private ArrayList<NetworkListing> networkListings;
+    private NetworkTransactionHandler nth;
     private FirebaseManager fm;
+    private SwipeRefreshLayout refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fm = new FirebaseManager();
+        //initialize
         nm = NetworkManager.getSharedInstance();
-        nm.obtainNetworks(this);
-        networks = nm.getNetworks();
-        list = (ListView)findViewById(R.id.list);
+        fm = new FirebaseManager(this);
         networkListings = new ArrayList<NetworkListing>();
-        for(int i = 0; i < networks.size(); i++) {
-            NetworkListing networkList = new NetworkListing(networks.get(i), i%2==0, "$50", "(216)-225-4193");
-            networkListings.add(networkList);
-            fm.writeNetwork(networkList);
-        }
-        adapter = new BuyFiAdapter(networkListings, getApplicationContext());
-        list.setAdapter(adapter);
+        list = (ListView)findViewById(R.id.list);
+
+        //pull to refresh
+        refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadNetworks();
+            }
+        });
+
+        loadNetworks();
+
+        //Logs
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.v("OnClick", "clicked: " + view.toString());
             }
         });
-
-
         Log.v("NetworkList", "List of Networks: \n" + networks);
 
-
     }
+
+    public void loadNetworks() {
+        nm.obtainNetworks(this);
+        networks = nm.getNetworks();
+        networkListings.clear();
+        for(int i = 0; i < networks.size(); i++) {
+            //default when creating a new network list
+            NetworkListing networkList = new NetworkListing(networks.get(i), i%2==0, "$50", "(216)-225-4193");
+            networkListings.add(networkList);
+//            nth = new NetworkTransactionHandler(networkList);
+//            fm.getReference().runTransaction(nth);
+        }
+        fm.setNetworkListing(networkListings);
+        fm.getNetworks();
+    }
+
+    public void showNetworks(ArrayList<NetworkListing> networkListings) {
+        this.networkListings = networkListings;
+        adapter = new BuyFiAdapter(networkListings, getApplicationContext());
+        list.setAdapter(adapter);
+        refresh.setRefreshing(false);
+    }
+
 
     @Override
     protected void onResume() {

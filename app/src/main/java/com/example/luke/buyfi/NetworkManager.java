@@ -48,7 +48,9 @@ public class NetworkManager {
             etWifiList += count++ + ". " + result.SSID + " : " + result.level + "\n" +
                     result.BSSID + "\n" + result.capabilities +"\n" +
                     "\n=======================\n";
-            addNetwork(new BuyFiNetwork(result.SSID, result.level, result.BSSID, result.capabilities));
+            if(!result.SSID.toString().isEmpty()) {
+                addNetwork(new BuyFiNetwork(result.SSID, result.level, result.BSSID, result.capabilities));
+            }
         }
         Log.v("MainActivity", "results: \n" + etWifiList);
 
