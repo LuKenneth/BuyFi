@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         networkListings.clear();
         for(int i = 0; i < networks.size(); i++) {
             //default when creating a new network list
-            NetworkListing networkList = new NetworkListing(networks.get(i), i%2==0, "$50", "(216)-225-4193");
+            NetworkListing networkList = new NetworkListing(networks.get(i), false, "N/A", "Phone number");
             networkListings.add(networkList);
 //            nth = new NetworkTransactionHandler(networkList);
 //            fm.getReference().runTransaction(nth);
