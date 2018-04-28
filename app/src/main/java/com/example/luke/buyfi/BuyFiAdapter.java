@@ -1,6 +1,7 @@
 package com.example.luke.buyfi;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 /**
  * Created by Luke on 4/15/2018.
  */
@@ -22,6 +25,7 @@ public class BuyFiAdapter extends ArrayAdapter<NetworkListing> implements View.O
     private ArrayList<NetworkListing> list;
     Context mContext;
     private int lastPosition = -1;
+    public static final String EXTRA_NETWORK_TAPPED = "com.example.buyfi.network_tapped";
 
     //cache
     private static class ViewHolder {
@@ -40,13 +44,14 @@ public class BuyFiAdapter extends ArrayAdapter<NetworkListing> implements View.O
 
     @Override
     public void onClick(View v) {
-
+        //Not sure how to call this yet
+        //openNetworkDetailsActivity();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final NetworkListing network = getItem(position);
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
         final View result;
 
         if(convertView == null) {
@@ -80,12 +85,7 @@ public class BuyFiAdapter extends ArrayAdapter<NetworkListing> implements View.O
         viewHolder.action_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(network.getClaimed()) {
-                    //rent();
-                }
-                else {
-                    //claim();
-                }
+                openNetworkDetailsActivity(network);
             }
         });
         return convertView;
@@ -98,5 +98,12 @@ public class BuyFiAdapter extends ArrayAdapter<NetworkListing> implements View.O
             case strong: return R.drawable.wifi_full;
             default: return R.drawable.wifi_full;
         }
+    }
+
+    private void openNetworkDetailsActivity(NetworkListing networkList) {
+        Intent i = new Intent(mContext, NetworkDetailsActivity.class);
+        i.putExtra(EXTRA_NETWORK_TAPPED, networkList);
+        i.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(i);
     }
 }

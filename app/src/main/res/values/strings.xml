@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BuyFi</string>
+    <string name="title_activity_network_details">NetworkDetailsActivity</string>
 </resources>

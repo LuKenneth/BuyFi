@@ -2,12 +2,14 @@ package com.example.luke.buyfi;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
+
 /**
  * Created by Luke on 4/12/2018.
  */
 
 @IgnoreExtraProperties
-public class BuyFiNetwork {
+public class BuyFiNetwork implements Serializable {
     private String SSID;
     private int signalStrength;
     private String BSSID;
@@ -64,6 +66,15 @@ public class BuyFiNetwork {
         }
         else {
             return signal_strength.strong;
+        }
+    }
+
+    public String convertSignalLevel() {
+        switch (getSignalLevel()) {
+            case good: return "Good";
+            case strong: return "Strong";
+            case weak: return "Weak";
+            default: return "Good";
         }
     }
 

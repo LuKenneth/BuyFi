@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //initialize
-        nm = NetworkManager.getSharedInstance();
+        nm = NetworkManager.getSharedInstance(this);
         fm = new FirebaseManager(this);
         networkListings = new ArrayList<NetworkListing>();
         list = (ListView)findViewById(R.id.list);
@@ -68,12 +68,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadNetworks() {
-        nm.obtainNetworks(this);
+        nm.obtainNetworks();
         networks = nm.getNetworks();
         networkListings.clear();
         for(int i = 0; i < networks.size(); i++) {
             //default when creating a new network list
-            NetworkListing networkList = new NetworkListing(networks.get(i), i%2==0, "$50", "(216)-225-4193");
+            NetworkListing networkList = new NetworkListing(networks.get(i), false, "N/A", "Phone number");
             networkListings.add(networkList);
 //            nth = new NetworkTransactionHandler(networkList);
 //            fm.getReference().runTransaction(nth);
