@@ -25,7 +25,12 @@ public class FirebaseManager {
     public FirebaseManager(final MainActivity caller) {
         ref = FirebaseDatabase.getInstance().getReference();
         this.caller = caller;
-        nm = NetworkManager.getSharedInstance();
+        nm = NetworkManager.getSharedInstance(caller);
+    }
+
+    public FirebaseManager() {
+        ref = FirebaseDatabase.getInstance().getReference();
+        this.caller = null;
     }
 
     public void getNetworks() {
@@ -75,7 +80,7 @@ public class FirebaseManager {
     }
 
     public void updateLocalNetworks() {
-        nm.obtainNetworks(caller);
+        nm.obtainNetworks();
         networkLists = convertToDefaultListing(nm.getNetworks());
     }
 
@@ -85,6 +90,28 @@ public class FirebaseManager {
             networkList.add(new NetworkListing(buyFiList.get(i), false, "N/A", "Phone number"));
         }
         return networkList;
+    }
+
+    public void claimNetwork(NetworkListing networkList) {
+        ref.child(networkList.getNetworkID()).setValue(networkList);
+    }
+
+    public NetworkListing getUpdatedNetwork(final NetworkListing networkListing) {
+        final ArrayList<NetworkListing> networkListArray = new ArrayList<NetworkListing>();
+        ValueEventListener networkListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                networkListArray.add(dataSnapshot.child(networkListing.getNetworkID()).getValue(NetworkListing.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.v("FirebaseManager.java", "getUpdatedNetwork onCancelled: Message: " + databaseError.getMessage() + " \n Details: " +
+                        databaseError.getDetails());
+            }
+        };
+        ref.addListenerForSingleValueEvent(networkListener);
+        return networkListArray.isEmpty() ? null : networkListArray.get(0);
     }
 
 }

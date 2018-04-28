@@ -3,8 +3,11 @@ package com.example.luke.buyfi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.net.Network;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -20,6 +23,7 @@ public class NetworkManager {
 
     private static NetworkManager sharedInstance = null;
     private ArrayList<BuyFiNetwork> networks = new ArrayList<BuyFiNetwork>();
+    private Context mContext;
     private NetworkManager() {}
 
     public enum BUYFI_SORT {
@@ -27,16 +31,20 @@ public class NetworkManager {
         signal_strength
     }
 
-    public static NetworkManager getSharedInstance() {
+    public static NetworkManager getSharedInstance(Context context) {
         if(sharedInstance == null) {
-            sharedInstance = new NetworkManager();
+            sharedInstance = new NetworkManager(context);
         }
         return sharedInstance;
     }
 
-    public void obtainNetworks(Context context) {
+    public NetworkManager(Context context) {
+        this.mContext = context;
+    }
 
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+    public void obtainNetworks() {
+
+        WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
 
         WifiInfo info = wifiManager.getConnectionInfo();
         List<ScanResult> results = wifiManager.getScanResults();
@@ -103,6 +111,29 @@ public class NetworkManager {
             return sortSignalStrength();
         }
         return null;
+    }
+
+    public String getCurrentNetworkID() {
+
+        String id = null;
+        ConnectivityManager connManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (networkInfo.isConnected()) {
+            final WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+            final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
+            if (connectionInfo != null && !(connectionInfo.getSSID().equals(""))) {
+                //if (connectionInfo != null && !StringUtil.isBlank(connectionInfo.getSSID())) {
+                id = connectionInfo.getSSID();
+            }
+            // Get WiFi status MARAKANA
+            WifiInfo info = wifiManager.getConnectionInfo();
+            String textStatus = "";
+            textStatus += "\n\nWiFi Status: " + info.toString();
+            String BSSID = info.getBSSID();
+            String MAC = info.getMacAddress();
+            id+=":"+BSSID;
+        }
+        return id;
     }
 
     private ArrayList<BuyFiNetwork> sortAlphabetically() {

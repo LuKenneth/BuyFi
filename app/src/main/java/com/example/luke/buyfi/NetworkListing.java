@@ -2,12 +2,14 @@ package com.example.luke.buyfi;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
+
 /**
  * Created by Luke on 4/15/2018.
  */
 
 @IgnoreExtraProperties
-public class NetworkListing {
+public class NetworkListing implements Serializable{
 
     private boolean claimed;
     private String price;

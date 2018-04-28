@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //initialize
-        nm = NetworkManager.getSharedInstance();
+        nm = NetworkManager.getSharedInstance(this);
         fm = new FirebaseManager(this);
         networkListings = new ArrayList<NetworkListing>();
         list = (ListView)findViewById(R.id.list);
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadNetworks() {
-        nm.obtainNetworks(this);
+        nm.obtainNetworks();
         networks = nm.getNetworks();
         networkListings.clear();
         for(int i = 0; i < networks.size(); i++) {
