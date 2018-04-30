@@ -11,7 +11,7 @@ The application uses the device's wireless band to scan for networks in range an
 
 ## Installation
 
- - Onto an Android Device API 15 + 
+ - Onto an Android Device (API 15+)  
 		 - Download and install "BuyFi.apk" (Must allow installation from unknown sources on device)
 - View and install from Android Studio
 
