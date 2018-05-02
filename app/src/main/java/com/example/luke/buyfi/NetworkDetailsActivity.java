@@ -73,7 +73,12 @@ public class NetworkDetailsActivity extends AppCompatActivity {
         NetworkManager nm = NetworkManager.getSharedInstance(this);
         Log.v("CONNECTED TO: ", nm.getCurrentNetworkID());
         Log.v("NETWORK ID: ", mNetworkList.getNetworkID());
-        return (nm.getCurrentNetworkID().equals(mNetworkList.getNetworkID()));
+        if(nm.getCurrentNetworkID() != null) {
+            return (nm.getCurrentNetworkID().equals(mNetworkList.getNetworkID()));
+        }
+        else {
+            return false;
+        }
     }
 
     private void openClaimNetworkActivity(NetworkListing networkList) {
