@@ -1,8 +1,10 @@
 package com.example.luke.buyfi;
 
 import android.net.Network;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -10,6 +12,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Luke on 4/15/2018.
@@ -21,6 +25,7 @@ public class FirebaseManager {
     private final MainActivity caller;
     private ArrayList<NetworkListing> networkLists;
     private NetworkManager nm;
+    public static final int RC_SIGN_IN = 123;
 
     public FirebaseManager(final MainActivity caller) {
         ref = FirebaseDatabase.getInstance().getReference();
@@ -113,5 +118,19 @@ public class FirebaseManager {
         ref.addListenerForSingleValueEvent(networkListener);
         return networkListArray.isEmpty() ? null : networkListArray.get(0);
     }
+
+
+    public void signIn(AppCompatActivity activity) {
+
+        // Create and launch sign-in intent
+        activity.startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(Arrays.asList(
+                                new AuthUI.IdpConfig.GoogleBuilder().build()))
+                        .build(),
+                RC_SIGN_IN);
+    }
+
 
 }
