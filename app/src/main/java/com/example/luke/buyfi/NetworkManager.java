@@ -118,22 +118,35 @@ public class NetworkManager {
 
         String id = null;
         ConnectivityManager connManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if (networkInfo.isConnected()) {
-            final WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
-            final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
-            if (connectionInfo != null && !(connectionInfo.getSSID().equals(""))) {
-                //if (connectionInfo != null && !StringUtil.isBlank(connectionInfo.getSSID())) {
-                id = connectionInfo.getSSID();
+        if(connManager != null) {
+            NetworkInfo networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            NetworkInfo mobileInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            if(mobileInfo != null) {
+                if(mobileInfo.isConnected()) {
+                    return null;
+                }
             }
-            // Get WiFi status MARAKANA
-            WifiInfo info = wifiManager.getConnectionInfo();
-            String textStatus = "";
-            textStatus += "\n\nWiFi Status: " + info.toString();
-            String BSSID = info.getBSSID();
-            String MAC = info.getMacAddress();
-            id+=":"+BSSID;
+            if(networkInfo != null) {
+                if (networkInfo.isConnected()) {
+                    final WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+                    final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
+                    if (connectionInfo != null && !(connectionInfo.getSSID().equals(""))) {
+                        //if (connectionInfo != null && !StringUtil.isBlank(connectionInfo.getSSID())) {
+                        id = connectionInfo.getSSID();
+                    }
+                    // Get WiFi status MARAKANA
+                    if(wifiManager != null) {
+                        WifiInfo info = wifiManager.getConnectionInfo();
+                        String textStatus = "";
+                        textStatus += "\n\nWiFi Status: " + info.toString();
+                        String BSSID = info.getBSSID();
+                        String MAC = info.getMacAddress();
+                        id += ":" + BSSID;
+                    }
+                }
+            }
         }
+
         return id;
     }
 
