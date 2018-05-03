@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class BuyFiListFragment extends Fragment {
+public class BuyFiListFragment extends Fragment implements Callable {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "list";
@@ -106,6 +106,7 @@ public class BuyFiListFragment extends Fragment {
         fm.getNetworks();
     }
 
+    @Override
     public void showNetworks(ArrayList<NetworkListing> networkListings) {
         this.networkListings = networkListings;
         adapter = new BuyFiAdapter(networkListings, getContext());
@@ -150,5 +151,10 @@ public class BuyFiListFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public Context getCallableContext() {
+        return getContext();
     }
 }
