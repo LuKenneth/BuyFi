@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
@@ -31,14 +32,7 @@ import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-
-    private NetworkManager nm;
-    private ArrayList<BuyFiNetwork> networks;
-    private ArrayList<NetworkListing> networkListings;
-    private NetworkTransactionHandler nth;
-    private FirebaseManager fm;
-    private SwipeRefreshLayout refresh;
+public class MainActivity extends AppCompatActivity implements BuyFiListFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         loadBuyFiListFragment();
 
-        initializeObjects();
-
-        addPullToRefresh();
-
-        loadNetworks();
-
-        googleSignIn();
+        //googleSignIn();
     }
 
     @Override
@@ -87,56 +75,11 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(new BuyFiListFragment());
     }
 
-    public void initializeObjects() {
-        nm = NetworkManager.getSharedInstance(this);
-        fm = new FirebaseManager(this);
-        networkListings = new ArrayList<NetworkListing>();
-        list = (ListView)findViewById(R.id.list);
-    }
-
-    public void addPullToRefresh() {
-        refresh = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
-        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadNetworks();
-            }
-        });
-    }
-
-    public void loadNetworks() {
-        nm.obtainNetworks();
-        networks = nm.getNetworks();
-        networkListings.clear();
-        for(int i = 0; i < networks.size(); i++) {
-            //default when creating a new network list
-            NetworkListing networkList = new NetworkListing(networks.get(i), false, "N/A", "Phone number");
-            networkListings.add(networkList);
-//            nth = new NetworkTransactionHandler(networkList);
-//            fm.getReference().runTransaction(nth);
-        }
-        fm.setNetworkListing(networkListings);
-        fm.getNetworks();
-    }
-
-    public void showNetworks(ArrayList<NetworkListing> networkListings) {
-        this.networkListings = networkListings;
-        adapter = new BuyFiAdapter(networkListings, getApplicationContext());
-        list.setAdapter(adapter);
-        refresh.setRefreshing(false);
-    }
-
     private void loadFragment(Fragment fragment) {
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.frameLayout, fragment)
                 .commit();
-    }
-
-
-    /*From previous tutorial*/
-    public void signIn() {
-        fm.signIn(this);
     }
 
     @Override
@@ -156,4 +99,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }

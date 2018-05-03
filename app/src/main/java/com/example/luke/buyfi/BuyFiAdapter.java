@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -20,7 +21,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
  * Created by Luke on 4/15/2018.
  */
 
-public class BuyFiAdapter extends ArrayAdapter<NetworkListing> implements View.OnClickListener {
+public class BuyFiAdapter extends ArrayAdapter<NetworkListing> implements View.OnClickListener, Serializable {
 
     private ArrayList<NetworkListing> list;
     Context mContext;

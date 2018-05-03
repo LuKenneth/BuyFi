@@ -4,10 +4,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class BuyFiListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -17,6 +20,13 @@ public class BuyFiListFragment extends Fragment {
 
     private ListView list;
     private BuyFiAdapter adapter;
+    private View view;
+    private NetworkManager nm;
+    private ArrayList<BuyFiNetwork> networks;
+    private ArrayList<NetworkListing> networkListings;
+    private NetworkTransactionHandler nth;
+    private FirebaseManager fm;
+    private SwipeRefreshLayout refresh;
 
     private OnFragmentInteractionListener mListener;
 
@@ -33,11 +43,11 @@ public class BuyFiListFragment extends Fragment {
      * @return A new instance of fragment BuyFiListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BuyFiListFragment newInstance(ListView param1, BuyFiAdapter param2) {
+    public static BuyFiListFragment newInstance(String param1, String param2) {
         BuyFiListFragment fragment = new BuyFiListFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PARAM1, param1);
-        args.putSerializable(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,8 +56,8 @@ public class BuyFiListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            list = getArguments().getSerializable(ARG_PARAM1);
-            adapter = getArguments().getString(ARG_PARAM2);
+//            buyFiList = (BuyFiListView) getArguments().getSerializable(ARG_PARAM1);
+//            adapter = (BuyFiAdapter) getArguments().getSerializable(ARG_PARAM2);
         }
     }
 
@@ -55,7 +65,52 @@ public class BuyFiListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.buyfi_list_fragment, container, false);
+        view = inflater.inflate(R.layout.buyfi_list_fragment, container, false);
+
+        initializeObjects(view);
+        addPullToRefresh(view);
+        loadNetworks();
+
+        return view;
+    }
+
+    public void initializeObjects(View v) {
+        nm = NetworkManager.getSharedInstance(getContext());
+        fm = new FirebaseManager(this);
+        networkListings = new ArrayList<NetworkListing>();
+        list = (ListView) v.findViewById(R.id.list);
+    }
+
+    public void addPullToRefresh(View v) {
+        refresh = (SwipeRefreshLayout) v.findViewById(R.id.swiperefresh);
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadNetworks();
+            }
+        });
+    }
+
+    public void loadNetworks() {
+        nm.obtainNetworks();
+        networks = nm.getNetworks();
+        networkListings.clear();
+        for(int i = 0; i < networks.size(); i++) {
+            //default when creating a new network list
+            NetworkListing networkList = new NetworkListing(networks.get(i), false, "N/A", "Phone number");
+            networkListings.add(networkList);
+//            nth = new NetworkTransactionHandler(networkList);
+//            fm.getReference().runTransaction(nth);
+        }
+        fm.setNetworkListing(networkListings);
+        fm.getNetworks();
+    }
+
+    public void showNetworks(ArrayList<NetworkListing> networkListings) {
+        this.networkListings = networkListings;
+        adapter = new BuyFiAdapter(networkListings, getContext());
+        list.setAdapter(adapter);
+        refresh.setRefreshing(false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

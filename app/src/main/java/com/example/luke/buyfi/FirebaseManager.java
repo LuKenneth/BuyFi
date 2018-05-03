@@ -22,15 +22,15 @@ import java.util.List;
 public class FirebaseManager {
 
     private DatabaseReference ref;
-    private final MainActivity caller;
+    private final BuyFiListFragment caller;
     private ArrayList<NetworkListing> networkLists;
     private NetworkManager nm;
     public static final int RC_SIGN_IN = 123;
 
-    public FirebaseManager(final MainActivity caller) {
+    public FirebaseManager(final BuyFiListFragment caller) {
         ref = FirebaseDatabase.getInstance().getReference();
         this.caller = caller;
-        nm = NetworkManager.getSharedInstance(caller);
+        nm = NetworkManager.getSharedInstance(caller.getContext());
     }
 
     public FirebaseManager() {
