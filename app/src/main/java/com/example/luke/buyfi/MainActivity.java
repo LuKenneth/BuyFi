@@ -34,14 +34,13 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements BuyFiListFragment.OnFragmentInteractionListener {
 
+    private NetworkManager nm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadBuyFiListFragment();
-
-        //googleSignIn();
     }
 
     @Override
@@ -49,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements BuyFiListFragment
         super.onStart();
 
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if(account.equals(null)) {
+            //googleSignIn();
+        }
+
     }
 
     @Override
@@ -64,11 +67,21 @@ public class MainActivity extends AppCompatActivity implements BuyFiListFragment
     }
 
     public void googleSignIn() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
 
-       GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        //startActivityForResult(signInIntent, )
+
+    }
+
+    public void checkForNetworksAndLoadFragments() {
+        nm = NetworkManager.getSharedInstance(getApplicationContext());
+        nm.obtainNetworks();
+        if(!nm.getNetworks().isEmpty()) {
+            loadBuyFiListFragment();
+        }
+        else {
+            //show the user that no networks are within range
+            loadFragment(new NoNetworksFragment());
+        }
     }
 
     public void loadBuyFiListFragment() {

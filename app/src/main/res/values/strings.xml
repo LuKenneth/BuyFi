@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BuyFi</string>
     <string name="title_activity_network_details">NetworkDetailsActivity</string>
-
+    <string name="client_id">780090517762-745i43jvpfjviv6a3041apdsqc4tscju.apps.googleusercontent.com</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
