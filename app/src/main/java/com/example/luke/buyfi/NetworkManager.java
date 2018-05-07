@@ -17,6 +17,8 @@ import java.util.List;
 
 /**
  * Created by Luke on 4/10/2018.
+ * This class performs all actions for managing
+ * the device's network capabilities
  */
 
 public class NetworkManager {
@@ -26,11 +28,13 @@ public class NetworkManager {
     private Context mContext;
     private NetworkManager() {}
 
+    //I thought I may need to sort them, I don't think I do anymore
     public enum BUYFI_SORT {
         alphabetically,
         signal_strength
     }
 
+    //Singleton
     public static NetworkManager getSharedInstance(Context context) {
         if(sharedInstance == null) {
             sharedInstance = new NetworkManager(context);
@@ -103,6 +107,7 @@ public class NetworkManager {
         return networks;
     }
 
+    //maybe ill do sorting in the future. Cherries on top.
     public ArrayList<BuyFiNetwork> sortBy(BUYFI_SORT s) {
         if(s.equals(BUYFI_SORT.alphabetically)) {
             return sortAlphabetically();
@@ -113,6 +118,7 @@ public class NetworkManager {
         return null;
     }
 
+    //gets the id of the network that the device is currently connected to.
     public String getCurrentNetworkID() {
 
         String id = null;

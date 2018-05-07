@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 /**
  * Created by Luke on 5/3/2018.
+ * Shows when there is no networks within range.
  */
 
 public class NoNetworksFragment extends Fragment {
@@ -23,6 +24,7 @@ public class NoNetworksFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.no_networks_fragment, container, false);
 
+        nm = NetworkManager.getSharedInstance(getActivity().getApplicationContext());
         addPullToRefresh(view);
         return view;
     }
@@ -39,8 +41,15 @@ public class NoNetworksFragment extends Fragment {
                 if(!nm.getNetworks().isEmpty()) {
                     main.loadBuyFiListFragment();
                 }
+                else {
+                    stopRefreshing();
+                }
             }
         });
+    }
+
+    public void stopRefreshing() {
+        refresh.setRefreshing(false);
     }
 
 }

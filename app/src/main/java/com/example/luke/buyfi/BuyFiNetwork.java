@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * Created by Luke on 4/12/2018.
+ * Custom object for a network
  */
 
 @IgnoreExtraProperties

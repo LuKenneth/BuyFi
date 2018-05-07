@@ -9,6 +9,7 @@ import com.google.firebase.database.Transaction;
 
 /**
  * Created by lpatterson18 on 4/23/2018.
+ * Not using this class currently.
  */
 
 public class NetworkTransactionHandler implements Transaction.Handler {

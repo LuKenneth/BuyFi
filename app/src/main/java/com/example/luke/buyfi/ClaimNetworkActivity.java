@@ -12,6 +12,10 @@ import android.widget.Toast;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.example.luke.buyfi.BuyFiAdapter.EXTRA_NETWORK_TAPPED;
 
+/*
+This class is for editing the information of a network
+when claiming to be the host.
+ */
 public class ClaimNetworkActivity extends AppCompatActivity {
 
     private TextView nameTextView;

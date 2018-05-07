@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * Created by Luke on 4/15/2018.
+ * This class is for managing all the interactions with firebase
  */
 
 public class FirebaseManager {
@@ -27,6 +28,7 @@ public class FirebaseManager {
     private NetworkManager nm;
     public static final int RC_SIGN_IN = 123;
 
+    //Command pattern
     public FirebaseManager(final Callable caller) {
         ref = FirebaseDatabase.getInstance().getReference();
         this.caller = caller;
@@ -38,6 +40,10 @@ public class FirebaseManager {
         this.caller = null;
     }
 
+    /*
+    This method retrieves the information for networks that have
+    information on firebase
+     */
     public void getNetworks() {
 
         ValueEventListener networkListener = new ValueEventListener() {

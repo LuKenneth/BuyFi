@@ -15,6 +15,10 @@ import android.widget.Toast;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.example.luke.buyfi.BuyFiAdapter.EXTRA_NETWORK_TAPPED;
 
+/*
+This class is for the activity that displays all the networks information
+when you tap on the action button
+ */
 public class NetworkDetailsActivity extends AppCompatActivity {
 
     private TextView nameTextView;

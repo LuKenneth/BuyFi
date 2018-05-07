@@ -19,6 +19,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * Created by Luke on 4/15/2018.
+ * Adapter for list of networks within range
  */
 
 public class BuyFiAdapter extends ArrayAdapter<NetworkListing> implements View.OnClickListener, Serializable {
@@ -92,6 +93,9 @@ public class BuyFiAdapter extends ArrayAdapter<NetworkListing> implements View.O
         return convertView;
     }
 
+    /*
+    This is for the signal strength images on the side
+     */
     private int getWifiImage(BuyFiNetwork.signal_strength signal_strength) {
         switch (signal_strength) {
             case weak: return R.drawable.wifi_weak;

@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 /**
  * Created by Luke on 4/15/2018.
+ * This class wraps a BuyFiNetwork into a listing object
+ * that holds information about its ownership
  */
 
 @IgnoreExtraProperties

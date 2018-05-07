@@ -31,6 +31,8 @@ import static com.example.luke.buyfi.FirebaseManager.RC_SIGN_IN;
 
 /**
  * Created by Luke on 5/3/2018.
+ * For google authentication.
+ * WORK IN PROGRESS
  */
 
 public class SignInFragment extends Fragment {

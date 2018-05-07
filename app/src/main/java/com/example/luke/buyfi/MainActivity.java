@@ -46,17 +46,18 @@ public class MainActivity extends AppCompatActivity implements BuyFiListFragment
     @Override
     protected void onStart() {
         super.onStart();
-
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if(account.equals(null)) {
-            //googleSignIn();
-        }
+        checkForNetworksAndLoadFragments();
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+//        if(account.equals(null)) {
+//            //googleSignIn();
+//        }
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        //Needs permissions to perform network scan
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         {
             if(checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements BuyFiListFragment
     }
 
     public void checkForNetworksAndLoadFragments() {
+        //perform the network scan
         nm = NetworkManager.getSharedInstance(getApplicationContext());
         nm.obtainNetworks();
         if(!nm.getNetworks().isEmpty()) {
@@ -95,22 +97,22 @@ public class MainActivity extends AppCompatActivity implements BuyFiListFragment
                 .commit();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == FirebaseManager.RC_SIGN_IN) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-
-            if (resultCode == RESULT_OK) {
-                // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                // ...
-            } else {
-                Log.v("FirebaseUI response: ", response.getError().getMessage());
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == FirebaseManager.RC_SIGN_IN) {
+//            IdpResponse response = IdpResponse.fromResultIntent(data);
+//
+//            if (resultCode == RESULT_OK) {
+//                // Successfully signed in
+//                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//                // ...
+//            } else {
+//                Log.v("FirebaseUI response: ", response.getError().getMessage());
+//            }
+//        }
+//    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
