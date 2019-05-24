@@ -40,3 +40,5 @@ The application uses the device's wireless band to scan for networks in range an
 
 **Accounts**
  - There is no current support for creating and maintaining user accounts.
+
+ ![BuyFi Screenshot](./buyfi_screenshot.png)
